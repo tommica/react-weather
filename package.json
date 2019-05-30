@@ -2,7 +2,7 @@
   "name": "react-weather",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://tommica.github.io/react-weather",
+  "homepage": "https://www.tommicarleman.net/react-weather",
   "dependencies": {
     "bootstrap": "^4.3.1",
     "react": "^16.8.6",
