@@ -1,3 +1,10 @@
+# React Weather
+
+Just a simple app that loads weather data for a location from [Weatherbit](https://www.weatherbit.io/) and displays it in a format that is quick to look at.
+
+The idea was to just build something with react and a remote API, and because my usual website for checking out the weather decided to change their website to be slower with their new design, I wanted something that was easier and faster to use.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
