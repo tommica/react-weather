@@ -41,6 +41,8 @@ class App extends React.Component {
 		const location = newState.search;
 		
 		window.location.hash = location;
+
+		this._initializeLoad(location);
 	}
 
 	render() {
