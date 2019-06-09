@@ -8,15 +8,20 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			search: '',
+			search: window.location.hash.substr(1),
 			loading: false,
 			result: [],
 		};
 
+		this._initializeLoad = this._initializeLoad.bind(this);
 		this.handleOnChange = this.handleOnChange.bind(this);
 		this.handleOnSubmit = this.handleOnSubmit.bind(this);
 		this._parseWeatherData = this._parseWeatherData.bind(this);
 		this._renderSpinnerOrChart = this._renderSpinnerOrChart.bind(this);
+
+		if(this.state.search !== '') {
+			this._initializeLoad(this.state.search);
+		}
 	}
 
 	handleOnChange(event) {
@@ -33,24 +38,9 @@ class App extends React.Component {
 		newState.result = [];
 		this.setState(newState);
 
-		//const url = 'https://api.met.no/weatherapi/locationforecast/1.9/.json?lat='+newState.lat+';lon='+newState.lon;
 		const location = newState.search;
-		const url = 'https://api.weatherbit.io/v1.0/forecast/hourly/geosearch?city='+location+'&key=3025f627f2d5456f92e0b52cf752d758';
-
-		axios.get(url).then((res) => {
-			const newState = {...this.state};
-			newState.result = this._parseWeatherData(res.data);
-			newState.loading = false;
-			this.setState(newState);
-		}).catch((err) => {
-			console.error(err);
-
-			const newState = {...this.state};
-			newState.loading = false;
-			this.setState(newState);
-
-			alert('Could not load weather data for location, please change your term or see the error log');
-		});
+		
+		window.location.hash = location;
 	}
 
 	render() {
@@ -67,7 +57,7 @@ class App extends React.Component {
 						<Col>
 							<Form onSubmit={this.handleOnSubmit}>
 								<Form.Group controlId="formLocation">
-									<Form.Control type="text" placeholder="Location" autoFocus onChange={this.handleOnChange} />
+									<Form.Control type="text" placeholder="Location" autoFocus onChange={this.handleOnChange} value={this.state.search} />
 								</Form.Group>
 							</Form>
 						</Col>
@@ -81,6 +71,24 @@ class App extends React.Component {
 				</Container>
 			</div>
 		);
+	}
+
+	_initializeLoad(location) {
+		const url = 'https://api.weatherbit.io/v1.0/forecast/hourly/geosearch?city='+location+'&key=3025f627f2d5456f92e0b52cf752d758';
+		axios.get(url).then((res) => {
+			const newState = {...this.state};
+			newState.result = this._parseWeatherData(res.data);
+			newState.loading = false;
+			this.setState(newState);
+		}).catch((err) => {
+			console.error(err);
+
+			const newState = {...this.state};
+			newState.loading = false;
+			this.setState(newState);
+
+			alert('Could not load weather data for location, please change your term or see the error log');
+		});
 	}
 
 	_parseWeatherData(data) {
@@ -163,9 +171,7 @@ class App extends React.Component {
 				</div>
 			)
 		} else if(this.state.loading) {
-			return (
-				<Spinner animation="grow" />
-			);
+			return <Spinner animation="grow" />
 		} else {
 			return null;
 		}
